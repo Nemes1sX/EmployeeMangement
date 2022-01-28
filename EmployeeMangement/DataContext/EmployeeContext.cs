@@ -34,12 +34,12 @@ namespace EmployeeMangement.DataLayer
                  new Role { Id = 5, Name = "Entry-level specialist" }
                 );
 
-            var roles = new List<Role>();
+           /* var roles = new List<Role>();
             roles.Add(new Role { Id = 1, Name = "CEO" });
             roles.Add(new Role { Id = 2, Name = "Senior Specialist" });
             roles.Add(new Role { Id = 3, Name = "Intermediate Specialist" });
             roles.Add(new Role { Id = 4, Name = "Junior Specialist" });
-            roles.Add(new Role { Id = 5, Name = "Entry-level specialist" });
+            roles.Add(new Role { Id = 5, Name = "Entry-level specialist" });*/
 
             var randomYears = new RandomGenerator();
 
@@ -47,10 +47,10 @@ namespace EmployeeMangement.DataLayer
                 .All()
                 .With(m => m.FirstName = Faker.Name.First())
                 .With(m => m.LastName = Faker.Name.Last())
-                .With(m => m.Boss = Pick<Boss>.RandomItemFrom(boss))
+                .With(m => m.BossId = Faker.RandomNumber.Next(1, 5))
                 .With(m => m.Salary = Faker.RandomNumber.Next(1000, 3000))
                 .With(m => m.HomeAddress = Faker.Address.StreetAddress())
-                .With(m => m.Role = Pick<Role>.RandomItemFrom(roles))
+                .With(m => m.RoleId = Faker.RandomNumber.Next(1, 5))
                 .With(m => m.BirthDate = DateTime.Now.AddYears(-randomYears.Next(18, 70)))
                 .With(m => m.EmploymentDate = DateTime.Now.AddYears(-randomYears.Next(0, 22)))
                 .Build();
