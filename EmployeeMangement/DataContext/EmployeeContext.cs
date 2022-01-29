@@ -34,13 +34,6 @@ namespace EmployeeMangement.DataLayer
                  new Role { Id = 5, Name = "Entry-level specialist" }
                 );
 
-           /* var roles = new List<Role>();
-            roles.Add(new Role { Id = 1, Name = "CEO" });
-            roles.Add(new Role { Id = 2, Name = "Senior Specialist" });
-            roles.Add(new Role { Id = 3, Name = "Intermediate Specialist" });
-            roles.Add(new Role { Id = 4, Name = "Junior Specialist" });
-            roles.Add(new Role { Id = 5, Name = "Entry-level specialist" });*/
-
             var randomYears = new RandomGenerator();
 
             var employees = Builder<Employee>.CreateListOfSize(100)

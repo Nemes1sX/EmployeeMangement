@@ -1,4 +1,6 @@
-﻿using EmployeeMangement.Models;
+﻿using EmployeeMangement.DataLayer;
+using EmployeeMangement.Models;
+using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,63 +10,79 @@ using System.Threading.Tasks;
 
 namespace EmployeeMangement.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
-        [HttpGet]
-        public async Task<List<Employee>> GetEmployee()
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository)
         {
-            return new List<Employee>();
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet]
+        [Route("index")]
+        public async Task<List<Employee>> GetEmployees()
+        {
+            return await _employeeRepository.GetEmployees();
+        }
+
+        [HttpGet]
+        [Route("show/{id}")]
         public async Task<Employee> GetEmployee(int id)
         {
-
+            return await _employeeRepository.GetEmployeeById(id);
         }
 
         [HttpGet]
+        [Route("boss/{id}")]
         public async Task<List<Employee>> GetEmployeeByBoss(int bossId)
         {
-            return new List<Employee>();
+            return await _employeeRepository.GetEmployeesByBoss(bossId);
 
         }
 
         [HttpGet]
-        public async Task<List<Employee>> GetAverageSalaryAndRole(int roleId)
+        [Route("role/{id}")]
+        public async Task<CountRoleAvgSalaryDto> GetAverageSalaryAndRole(int roleId)
         {
-
+            return await _employeeRepository.CountAndAverageSalaryByRole(roleId);
         }
 
         [HttpGet]
+        [Route("get/{name}{from}{to}")]
         public async Task<List<Employee>> GetEmployeeByNameAndBirthDate(string name, DateTime from, DateTime to)
         {
-            return new List<Employee>();
+            return await _employeeRepository.GetEmployeesByNameAndBirthDate(name, from, to);    
         }
 
         [HttpPost]
+        [Route("add")]
         public async Task<Employee> AddEmployee(EmployeeRequest request)
         {
-            return new Employee();
+            return await _employeeRepository.AddEmployee(request);
         }
 
         [HttpPost]
+        [Route("update/{id}")]
         public async Task<Employee> UpdateEmployee(int id, EmployeeRequest request)
         {
-            return new Employee();
+            return await _employeeRepository.UpdateEmployee(id, request);
         }
 
         [HttpPost]
+        [Route("updatesalary/{id}")]
         public async Task<Employee> UpdateEmployeeSalary(int id, int salary)
         {
-            return new Employee();
+            return await _employeeRepository.UpdateEmployeeSalary(id, salary);
         }
 
         [HttpDelete]
+        [Route("delete/{id}")]
         public async Task<int> DeleteEmployee(int id)
         {
-            return id;
+            return await _employeeRepository.DeleteEmployee(id);
         }
     }
 }

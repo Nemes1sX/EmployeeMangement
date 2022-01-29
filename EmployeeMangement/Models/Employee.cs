@@ -15,7 +15,7 @@ namespace EmployeeMangement.Models
         public DateTime EmploymentDate { get; set; }
         public string HomeAddress { get; set; }  
         public int Salary { get; set; }
-        public int BossId { get; set; }
+        public int? BossId { get; set; }
         public int RoleId { get; set; }
         [ForeignKey("BossId")]
         public Boss Boss { get; set; }
