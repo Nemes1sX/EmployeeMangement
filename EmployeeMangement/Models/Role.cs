@@ -9,6 +9,6 @@ namespace EmployeeMangement.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public IList<Employee> Employees { get; set; } 
+        public virtual IList<Employee> Employees { get; set; } 
     }
 }

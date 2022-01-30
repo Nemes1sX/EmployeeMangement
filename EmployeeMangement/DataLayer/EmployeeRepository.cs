@@ -1,4 +1,6 @@
-﻿using EmployeeMangement.Models;
+﻿using EmployeeMangement.DataContext;
+using EmployeeMangement.Infrastructure;
+using EmployeeMangement.Models;
 using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
 using EmployeeMangement.Utilities;
@@ -15,61 +17,85 @@ namespace EmployeeMangement.DataLayer
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly EmployeeContext _db;
-        private readonly LoggingException _loggingException; 
+        private Mapping _mapper;
 
-        public EmployeeRepository(EmployeeContext db, LoggingException loggingException)
+        public EmployeeRepository(EmployeeContext db, Mapping mapper)
         {
             _db = db;
-            _loggingException = loggingException;
+            _mapper = mapper;
         }
 
-        public async Task<List<Employee>> GetEmployees()
+        public async Task<List<EmployeeDto>> GetEmployees()
         {
             try
             {
-                return await _db.Employees.ToListAsync();
+               var employeesList = await _db.Employees
+                    .Include(b => b.Boss)
+                    .Include(r => r.Role)
+                    .ToListAsync();
+
+                List<EmployeeDto> employees = _mapper.MapEmployee().Map<List<EmployeeDto>>(employeesList);
+
+                return employees;
+
             } catch (Exception ex) 
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<Employee> GetEmployeeById(int id)
+        public async Task<EmployeeDto> GetEmployeeById(int id)
         {
             try
             {
-                return await _db.Employees.FindAsync(id);
+                var employee = await _db.Employees
+                                .Include(b => b.Boss).Include(r => r.Role)
+                                .SingleAsync(x => x.Id == id);
+
+                return _mapper.MapEmployee().Map<EmployeeDto>(employee);
+                                          
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<List<Employee>> GetEmployeesByBoss(int bossId)
+        public async Task<List<EmployeeDto>> GetEmployeesByBoss(int bossId)
         {
             try
             {
-                return await _db.Employees.Where(x => x.BossId == bossId).ToListAsync();
+               var boss = _db.Bosses.Find(bossId);
+                if (boss == null)
+                    return null;
+
+              var employees =  await _db.Employees.Where(x => x.BossId == bossId)
+                   .Include(x => x.Role)
+                   .Include(b => b.Boss)
+                   .ToListAsync();
+          
+                return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<List<Employee>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to)
+        public async Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to)
         {
             try
             {
-                return await _db.Employees.Where(x => x.FirstName == name && (x.BirthDate >= from && x.BirthDate <= to)).ToListAsync();
+                var employees = await _db.Employees.Where(x => x.FirstName == name && (x.BirthDate >= from && x.BirthDate <= to)).ToListAsync();
+
+                return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
@@ -78,6 +104,10 @@ namespace EmployeeMangement.DataLayer
         {
            try
             {
+                var role = _db.Roles.Find(roleId);
+                if (role == null) 
+                    return null;
+
                 var result = new CountRoleAvgSalaryDto();
                 result.Count = await _db.Employees.Where(x => x.RoleId == roleId).CountAsync();
                 decimal totalSalary = await _db.Employees.Where(x => x.RoleId == roleId).SumAsync(x => x.Salary);
@@ -87,12 +117,12 @@ namespace EmployeeMangement.DataLayer
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<Employee> AddEmployee(EmployeeRequest request)
+        public async Task<EmployeeDto> AddEmployee(EmployeeRequest request)
         {
             try
             {
@@ -106,18 +136,19 @@ namespace EmployeeMangement.DataLayer
                 employee.HomeAddress = request.Address;
                 employee.Salary = request.Salary;
 
+                _db.Employees.Add(employee);
                 await _db.SaveChangesAsync();
-                
-                return employee;
+
+                return _mapper.MapEmployee().Map<EmployeeDto>(employee);
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<Employee> UpdateEmployee(int id, EmployeeRequest request)
+        public async Task<EmployeeDto> UpdateEmployee(int id, EmployeeRequest request)
         {
             try
             {
@@ -137,17 +168,18 @@ namespace EmployeeMangement.DataLayer
                 employee.Salary = request.Salary;
 
                 await _db.SaveChangesAsync();
+             
+                return _mapper.MapEmployee().Map<EmployeeDto>(employee);
 
-                return employee;
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
 
-        public async Task<Employee> UpdateEmployeeSalary(int id, int salary)
+        public async Task<EmployeeDto> UpdateEmployeeSalary(int id, int salary)
         {
             try
             {
@@ -160,12 +192,13 @@ namespace EmployeeMangement.DataLayer
                 employee.Salary = salary;
 
                 await _db.SaveChangesAsync();
+              
+                return _mapper.MapEmployee().Map<EmployeeDto>(employee);
 
-                return employee;
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return null;
             }
         }
@@ -187,7 +220,7 @@ namespace EmployeeMangement.DataLayer
             }
             catch (Exception ex)
             {
-                _loggingException.SaveLogFile(ex.Message);
+                LoggingException.SaveLogFile(ex.Message);
                 return 0;
             }
         }

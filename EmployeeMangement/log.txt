@@ -1,0 +1,9 @@
+2022-01-30  - Method: Enumerator failed to MoveNextAsync.
+2022-01-30  - Method: Cannot open database "EmployeeManagement" requested by the login. The login failed.
+Login failed for user 'DESKTOP-7VL5B8Q\Nemesis'.
+2022-01-30  - Method: Cannot open database "EmployeeManagement" requested by the login. The login failed.
+Login failed for user 'DESKTOP-7VL5B8Q\Nemesis'.
+2022-01-30  - Method: Cannot open database "EmployeeManagement" requested by the login. The login failed.
+Login failed for user 'DESKTOP-7VL5B8Q\Nemesis'.
+2022-01-30  - Method: Cannot open database "EmployeeManagement" requested by the login. The login failed.
+Login failed for user 'DESKTOP-7VL5B8Q\Nemesis'.

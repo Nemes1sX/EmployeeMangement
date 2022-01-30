@@ -6,7 +6,7 @@ namespace EmployeeMangement.Utilities
 {
     public class LoggingException
     {
-        public void SaveLogFile(string method)
+        public static void SaveLogFile(string method)
         {
         
                 string location = ConfigurationManager.AppSettings["LogLocation"];

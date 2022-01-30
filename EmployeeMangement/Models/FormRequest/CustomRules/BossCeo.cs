@@ -8,7 +8,7 @@ namespace EmployeeMangement.Models.FormRequest.CustomRules
         {
             var employee = (EmployeeRequest)validationContext.ObjectInstance;
 
-            return (employee.RoleId == 1 && employee.BossId == null)
+            return (employee.RoleId != 1 && employee.BossId != null)
                 ? ValidationResult.Success
                 : new ValidationResult("Boss can't have a CEO");
         }

@@ -18,8 +18,8 @@ namespace EmployeeMangement.Models
         public int? BossId { get; set; }
         public int RoleId { get; set; }
         [ForeignKey("BossId")]
-        public Boss Boss { get; set; }
+        public virtual Boss Boss { get; set; }
         [ForeignKey("RoleId")]
-        public Role Role { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

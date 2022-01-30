@@ -9,14 +9,14 @@ namespace EmployeeMangement.DataLayer
 {
     public interface IEmployeeRepository
     {
-        Task<List<Employee>> GetEmployees();
-        Task<Employee> GetEmployeeById(int id);
-        Task<List<Employee>> GetEmployeesByBoss(int bossId);
-        Task<List<Employee>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to);
+        Task<List<EmployeeDto>> GetEmployees();
+        Task<EmployeeDto> GetEmployeeById(int id);
+        Task<List<EmployeeDto>> GetEmployeesByBoss(int bossId);
+        Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to);
         Task<CountRoleAvgSalaryDto> CountAndAverageSalaryByRole(int roleId);
-        Task<Employee> AddEmployee(EmployeeRequest request);
-        Task<Employee> UpdateEmployee(int id, EmployeeRequest request);
-        Task<Employee> UpdateEmployeeSalary(int id, int salary);
+        Task<EmployeeDto> AddEmployee(EmployeeRequest request);
+        Task<EmployeeDto> UpdateEmployee(int id, EmployeeRequest request);
+        Task<EmployeeDto> UpdateEmployeeSalary(int id, int salary);
         Task<int> DeleteEmployee(int id);
     }
 }

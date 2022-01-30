@@ -2,18 +2,19 @@
 using EmployeeMangement.Models;
 using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+//using System.Web.Http;
 
 namespace EmployeeMangement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
-    {
+    { 
+
         private readonly IEmployeeRepository _employeeRepository;
 
         public EmployeeController(IEmployeeRepository employeeRepository)
@@ -23,66 +24,115 @@ namespace EmployeeMangement.Controllers
 
         [HttpGet]
         [Route("index")]
-        public async Task<List<Employee>> GetEmployees()
+        public async Task<ActionResult<List<EmployeeDto>>> GetEmployees()
         {
-            return await _employeeRepository.GetEmployees();
+            var employees = await _employeeRepository.GetEmployees();
+
+            if (employees.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(employees);
         }
 
         [HttpGet]
         [Route("show/{id}")]
-        public async Task<Employee> GetEmployee(int id)
+        public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
-            return await _employeeRepository.GetEmployeeById(id);
+            var employee = await _employeeRepository.GetEmployeeById(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(employee);
         }
 
         [HttpGet]
-        [Route("boss/{id}")]
-        public async Task<List<Employee>> GetEmployeeByBoss(int bossId)
+        [Route("boss/{bossId}")]
+        public async Task<ActionResult<List<EmployeeDto>>> GetEmployeeByBoss(int bossId)
         {
-            return await _employeeRepository.GetEmployeesByBoss(bossId);
+            var employees = await _employeeRepository.GetEmployeesByBoss(bossId);
+
+            if (employees == null || employees.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(employees);
 
         }
 
         [HttpGet]
-        [Route("role/{id}")]
-        public async Task<CountRoleAvgSalaryDto> GetAverageSalaryAndRole(int roleId)
+        [Route("role/{roleId}")]
+        public async Task<ActionResult<CountRoleAvgSalaryDto>> GetAverageSalaryAndRole(int roleId)
         {
-            return await _employeeRepository.CountAndAverageSalaryByRole(roleId);
+            var result = await _employeeRepository.CountAndAverageSalaryByRole(roleId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("get/{name}{from}{to}")]
-        public async Task<List<Employee>> GetEmployeeByNameAndBirthDate(string name, DateTime from, DateTime to)
+        [Route("getByNameAndBirthDate")]
+        public async Task<ActionResult<List<EmployeeDto>>> GetEmployeeByNameAndBirthDate(string name, DateTime from, DateTime to)
         {
-            return await _employeeRepository.GetEmployeesByNameAndBirthDate(name, from, to);    
+            var employees = await _employeeRepository.GetEmployeesByNameAndBirthDate(name, from, to);
+
+            if (employees.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(employees);    
         }
 
         [HttpPost]
         [Route("add")]
-        public async Task<Employee> AddEmployee(EmployeeRequest request)
+        public async Task<ActionResult<EmployeeDto>> AddEmployee(EmployeeRequest request)
         {
-            return await _employeeRepository.AddEmployee(request);
+            var employee = await _employeeRepository.AddEmployee(request);
+
+            return Ok(employee);
         }
 
         [HttpPost]
         [Route("update/{id}")]
-        public async Task<Employee> UpdateEmployee(int id, EmployeeRequest request)
+        public async Task<ActionResult<EmployeeDto>> UpdateEmployee(int id, EmployeeRequest request)
         {
-            return await _employeeRepository.UpdateEmployee(id, request);
+            var employee = await _employeeRepository.UpdateEmployee(id, request);
+
+            if (employee == null)
+                return NotFound();
+
+            return Ok(employee);
         }
 
         [HttpPost]
         [Route("updatesalary/{id}")]
-        public async Task<Employee> UpdateEmployeeSalary(int id, int salary)
+        public async Task<ActionResult<EmployeeDto>> UpdateEmployeeSalary(int id, int salary)
         {
-            return await _employeeRepository.UpdateEmployeeSalary(id, salary);
+            var employee = await _employeeRepository.UpdateEmployeeSalary(id, salary);
+
+            if (employee == null)
+                return NotFound();
+
+            return Ok(employee);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<int> DeleteEmployee(int id)
+        public async Task<ActionResult<int>> DeleteEmployee(int id)
         {
-            return await _employeeRepository.DeleteEmployee(id);
+            var recordId = await _employeeRepository.DeleteEmployee(id);
+            if (recordId == 0)
+                return NotFound();
+
+            return Ok(id);
         }
     }
 }
