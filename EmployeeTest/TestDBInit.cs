@@ -16,8 +16,8 @@ namespace EmployeeTest
 
         public void Seed(EmployeeContext context)
         {
-            //context.Database.EnsureCreated();
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            context.Database.EnsureDeleted();
 
             var randomYears = new RandomGenerator();
 

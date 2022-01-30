@@ -113,7 +113,6 @@ namespace EmployeeMangement.Controllers
         }
 
         [HttpGet]
-        //[Route("namebirth/{name}/{from}/{to}")]
         [Route("getbynameandbirth")]
         public async Task<ActionResult<List<EmployeeDto>>> GetByNameAndBirthDate(string name, string from, string to)
         {

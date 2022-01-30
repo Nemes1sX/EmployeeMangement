@@ -20,8 +20,7 @@ namespace EmployeeTest
 
         //public static string connectionString = Configuration["ConnectionStrings:TestEmployeeDatabase"];
 
-        //public static string connectionString = @"Data Source=(localdb)\v15.0;Initial Catalog=TestEmlpoymentManagement;Integrated Security=True;Connect Timeout=30;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        public static string connectionString = "Server=(localdb)\\\\mssqllocaldb;Database=TestEmlpoymentManagement;Trusted_Connection=True;Integrated Security=True;MultipleActiveResultSets=True";
+        public static string connectionString = "Server=(localdb)\\mssqllocaldb;Database=TestEmlpoymentManagement;Trusted_Connection=False;Integrated Security=False;MultipleActiveResultSets=True";
 
         static TestEmployee()
         {
