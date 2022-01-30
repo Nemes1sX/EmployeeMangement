@@ -12,7 +12,7 @@ namespace EmployeeMangement.DataLayer
         Task<List<EmployeeDto>> GetEmployees();
         Task<EmployeeDto> GetEmployeeById(int id);
         Task<List<EmployeeDto>> GetEmployeesByBoss(int bossId);
-        Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to);
+        Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, string from, string to);
         Task<CountRoleAvgSalaryDto> CountAndAverageSalaryByRole(int roleId);
         Task<EmployeeDto> AddEmployee(EmployeeRequest request);
         Task<EmployeeDto> UpdateEmployee(int id, EmployeeRequest request);

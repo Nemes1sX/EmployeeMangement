@@ -61,10 +61,16 @@ namespace EmployeeMangement.DataLayer
 
         }
 
-        public async Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, DateTime from, DateTime to)
+        public async Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, string from, string to)
         {
-
-            var employees = await _db.Employees.Where(x => x.FirstName == name && (x.BirthDate >= from && x.BirthDate <= to)).ToListAsync();
+            var fromDate = DateTime.Parse(from);
+            var toDate = DateTime.Parse(to);    
+            var employees = await _db.Employees
+               .Where(x => x.FirstName.ToLower().StartsWith(name.ToLower()))    
+               .Where(x => x.BirthDate >= fromDate && x.BirthDate <= toDate)
+               .Include(x => x.Boss)
+               .Include(x => x.Role)
+               .ToListAsync();
 
             return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
 
