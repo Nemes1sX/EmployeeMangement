@@ -2,6 +2,7 @@
 using EmployeeMangement.Models;
 using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
+using EmployeeMangement.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,37 +17,53 @@ namespace EmployeeMangement.Controllers
     { 
 
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly LoggingException _loggingException;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository, LoggingException loggingException)
         {
             _employeeRepository = employeeRepository;
+            _loggingException = loggingException;
         }
 
         [HttpGet]
         [Route("index")]
         public async Task<ActionResult<List<EmployeeDto>>> GetEmployees()
         {
-            var employees = await _employeeRepository.GetEmployees();
-
-            if (employees.Count == 0)
+            try
             {
-                return NotFound();
-            }
+                var employees = await _employeeRepository.GetEmployees();
 
-            return Ok(employees);
+                if (employees.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(employees);
+            } catch (Exception ex)
+            {
+                _loggingException.SaveLogFile(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet]
         [Route("show/{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
-            var employee = await _employeeRepository.GetEmployeeById(id);
-            if (employee == null)
+            try
             {
-                return NotFound();
-            }
+                var employee = await _employeeRepository.GetEmployeeById(id);
+                if (employee == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(employee);
+                return Ok(employee);
+            } catch (Exception ex)
+            {
+                _loggingException.SaveLogFile(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet]
