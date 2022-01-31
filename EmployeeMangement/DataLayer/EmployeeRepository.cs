@@ -40,7 +40,7 @@ namespace EmployeeMangement.DataLayer
         {
             var employee = await _db.Employees
                             .Include(b => b.Boss).Include(r => r.Role)
-                            .SingleAsync(x => x.Id == id);
+                            .SingleOrDefaultAsync(x => x.Id == id);
 
             return _mapper.MapEmployee().Map<EmployeeDto>(employee);
 
@@ -66,7 +66,8 @@ namespace EmployeeMangement.DataLayer
             var fromDate = DateTime.Parse(from);
             var toDate = DateTime.Parse(to);    
             var employees = await _db.Employees
-               .Where(x => x.FirstName.ToLower().StartsWith(name.ToLower()))    
+               .Where(x => x.FirstName.ToLower().StartsWith(name.ToLower()) || x.LastName.ToLower().StartsWith(name.ToLower())
+                || name == "" || name == "undefined" || name == null)    
                .Where(x => x.BirthDate >= fromDate && x.BirthDate <= toDate)
                .Include(x => x.Boss)
                .Include(x => x.Role)
