@@ -64,17 +64,32 @@ namespace EmployeeMangement.DataLayer
         public async Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, string from, string to)
         {
             var fromDate = DateTime.Parse(from);
-            var toDate = DateTime.Parse(to);    
-            var employees = await _db.Employees
-               .Where(x => x.FirstName.ToLower().StartsWith(name.ToLower()) || x.LastName.ToLower().StartsWith(name.ToLower())
-                || name == "" || name == "undefined" || name == null)    
-               .Where(x => x.BirthDate >= fromDate && x.BirthDate <= toDate)
+            var toDate = DateTime.Parse(to);
+            var employees = from p in _db.Employees
+                            select p;
+            if (!string.IsNullOrEmpty(name))
+            {
+                employees = employees.Where(x => x.FirstName.ToLower().StartsWith(name.ToLower())
+               || x.LastName.ToLower().StartsWith(name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(from))
+            {
+                employees = employees.Where(x => x.BirthDate >= fromDate);
+            }
+            if(!string.IsNullOrEmpty(to))
+            {
+                employees = employees.Where(y => y.BirthDate <= toDate);
+            }
+            var employeesList = await 
+                employees
                .Include(x => x.Boss)
                .Include(x => x.Role)
                .ToListAsync();
 
             return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
 
+            //
+            //|| string.IsNullOrEmpty(name)
         }
 
         public async Task<CountRoleAvgSalaryDto> CountAndAverageSalaryByRole(int roleId)
