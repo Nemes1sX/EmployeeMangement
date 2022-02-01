@@ -10,25 +10,37 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Xunit;
+using Microsoft.Data.Sqlite;
+using EmployeeTest.Attributes;
+
 
 namespace EmployeeTest
 {
+    [TestCaseOrderer("EmployeeTest.Orderers.PriorityOrder", "EmployeeTest")]
     public class TestEmployee
     {
-        private EmployeeRepository repo;
         private Mapping mapper;
+        private EmployeeRepository repo;
         public static DbContextOptions<EmployeeContext> dbContextOptions { get; }
         public static IConfiguration Configuration { get; }
 
         //public static string connectionString = Configuration["ConnectionStrings:TestEmployeeDatabase"];
 
-        public static string connectionString = "Server=(localdb)\\mssqllocaldb;Database=TestEmlpoymentManagement;Trusted_Connection=False;Integrated Security=False;MultipleActiveResultSets=True";
+        //public static string connectionString = "Server=DESKTOP-7VL5B8Q;Database=EmployerTest;User ID=sa;PWD=qwaeis12;Trusted_Connection=False; MultipleActiveResultSets=true;Integrated Security=SSPI";
+        public static string connectionString = "Server=(localdb)\\v15.0;Database=TestEmployent;Trusted_Connection=True;";
+
 
         static TestEmployee()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
             dbContextOptions = new DbContextOptionsBuilder<EmployeeContext>()
            .UseSqlServer(connectionString)
            .Options;
+            /*dbContextOptions = new DbContextOptionsBuilder<EmployeeContext>()
+            .UseSqlite(connection)
+            .Options;*/
         }
 
         public TestEmployee()
@@ -40,18 +52,20 @@ namespace EmployeeTest
             repo = new EmployeeRepository(context, mapper);
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public async void Task_GetEmployees()
         {
+
             var data = await repo.GetEmployees();
 
             Assert.IsType<List<EmployeeDto>>(data);
             Assert.Equal(100, data.Count);
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async void Task_CreateEmployee()
         {
+
             var employeeeRequest = new EmployeeRequest
             {
                 FirstName = "Testas",
@@ -74,7 +88,7 @@ namespace EmployeeTest
             Assert.Equal(data.Salary, employeeeRequest.Salary);            
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public async void Task_GetEmployeeById()
         {
             var employeeId = 101;
@@ -85,7 +99,7 @@ namespace EmployeeTest
             Assert.IsType<EmployeeDto>(data);
         }
 
-        [Fact]
+        [Fact, TestPriority(4)]
         public async void Task_UpdateEmployee()
         {
             var employeeeRequest = new EmployeeRequest
@@ -109,7 +123,7 @@ namespace EmployeeTest
             Assert.Equal(employeeeRequest.Address, data.HomeAddress);
         }
 
-        [Fact]
+        [Fact, TestPriority(5)]
         public async void Task_DeleteEmployee()
         {
             var employeeId = 101;
