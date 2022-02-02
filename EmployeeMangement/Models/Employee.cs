@@ -9,13 +9,20 @@ namespace EmployeeMangement.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public DateTime BirthDate { get; set; }
+        [Required]
         public DateTime EmploymentDate { get; set; }
-        public string HomeAddress { get; set; }  
+        [Required]
+        public string HomeAddress { get; set; }
+        [Required]
         public int Salary { get; set; }
         public int? BossId { get; set; }
+        [Required]
         public int RoleId { get; set; }
         [ForeignKey("BossId")]
         public virtual Boss Boss { get; set; }

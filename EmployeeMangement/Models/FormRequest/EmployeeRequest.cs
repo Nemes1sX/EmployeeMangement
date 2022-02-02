@@ -18,7 +18,6 @@ namespace EmployeeMangement.Models.FormRequest
         public string Address { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Salary can't be negative")]
         public int Salary { get; set; }
-        [BossCeo]
         public int? BossId { get; set; }
         [Required, BossCeo]
         public int RoleId { get; set; }
