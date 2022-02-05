@@ -6,7 +6,7 @@ namespace EmployeeMangement.Models.FormRequest
 {
     public class EmployeeRequest
     {
-        [Required, MinLength(4), MaxLength(50), FirstLastName]
+        [Required, MinLength(4), MaxLength(50)]
         public string FirstName { get; set; }
         [Required, MinLength(4), MaxLength(50), FirstLastName]
         public string LastName { get; set; }

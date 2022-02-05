@@ -63,15 +63,25 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<List<EmployeeDto>> GetEmployeesByNameAndBirthDate(string name, string from, string to)
         {
-            var fromDate = DateTime.Parse(from);
-            var toDate = DateTime.Parse(to);
+            DateTime fromDate;
+            DateTime toDate;
+            DateTime.TryParse(from, out fromDate);
+            DateTime.TryParse(to, out toDate);
             var employees = from p in _db.Employees
                             select p;
+            
+
             if (!string.IsNullOrEmpty(name))
             {
                 employees = employees.Where(x => x.FirstName.ToLower().StartsWith(name.ToLower())
                || x.LastName.ToLower().StartsWith(name.ToLower()));
             }
+            if (fromDate > toDate)
+            {
+                DateTime tewp = fromDate;
+                fromDate = toDate;
+                toDate = tewp;
+            }           
             if (!string.IsNullOrEmpty(from))
             {
                 employees = employees.Where(x => x.BirthDate >= fromDate);
@@ -88,8 +98,6 @@ namespace EmployeeMangement.DataLayer
 
             return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
 
-            //
-            //|| string.IsNullOrEmpty(name)
         }
 
         public async Task<CountRoleAvgSalaryDto> CountAndAverageSalaryByRole(int roleId)
