@@ -13,7 +13,7 @@ namespace EmployeeMangement.Models.FormRequest
         [WorkAge]
         public DateTime BirthDate { get; set; }
         [EmploymentTime]
-        public DateTime EmployentDate { get; set; }
+        public DateTime EmploymentDate { get; set; }
         [Required]
         public string Address { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Salary can't be negative")]

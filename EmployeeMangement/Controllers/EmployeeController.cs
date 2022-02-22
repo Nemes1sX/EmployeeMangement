@@ -69,7 +69,7 @@ namespace EmployeeMangement.Controllers
         }
 
         [HttpGet]
-        [Route("boss/{bossId}")]
+        [Route("boss")]
         public async Task<ActionResult<List<EmployeeDto>>> GetEmployeeByBoss(int bossId)
         {
             try
@@ -151,8 +151,8 @@ namespace EmployeeMangement.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("update/{id}")]
+        [HttpPut]
+        [Route("update")]
         public async Task<ActionResult<EmployeeDto>> UpdateEmployee(int id, EmployeeRequest request)
         {
             try
@@ -171,8 +171,8 @@ namespace EmployeeMangement.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("updatesalary/{id}")]
+        [HttpPatch]
+        [Route("updatesalary")]
         public async Task<ActionResult<EmployeeDto>> UpdateEmployeeSalary(int id, int salary)
         {
             try

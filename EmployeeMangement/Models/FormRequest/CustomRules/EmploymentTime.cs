@@ -9,19 +9,19 @@ namespace EmployeeMangement.Models.FormRequest.CustomRules
         {
             var employee = (EmployeeRequest)validationContext.ObjectInstance;
             
-            if (employee.EmployentDate == null)
+            if (employee.EmploymentDate == null)
             {
                 return new ValidationResult("Employent date is Required");
             }
 
-            if (employee.EmployentDate >= DateTime.Today)
+            if (employee.EmploymentDate >= DateTime.Today)
             {
                 return new ValidationResult("Employment date cannot be future date");
             }
 
-            return (employee.EmployentDate <= new DateTime(2000, 01, 01))
-                ? ValidationResult.Success
-                : new ValidationResult("Employment date cannot be earlier than 2000");  
+            return (employee.EmploymentDate < new DateTime(2000, 01, 01))
+                ? new ValidationResult("Employment date cannot be earlier than 2000")
+                : ValidationResult.Success;
         }
     }
 }

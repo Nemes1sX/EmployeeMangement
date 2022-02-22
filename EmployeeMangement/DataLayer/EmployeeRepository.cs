@@ -122,7 +122,7 @@ namespace EmployeeMangement.DataLayer
             employee.LastName = request.LastName;
             employee.FirstName = request.FirstName;
             employee.BirthDate = request.BirthDate;
-            employee.EmploymentDate = request.EmployentDate;
+            employee.EmploymentDate = request.EmploymentDate;
             employee.HomeAddress = request.Address;
             employee.Salary = request.Salary;
 
@@ -145,7 +145,7 @@ namespace EmployeeMangement.DataLayer
             employee.LastName = request.LastName;
             employee.FirstName = request.FirstName;
             employee.BirthDate = request.BirthDate;
-            employee.EmploymentDate = request.EmployentDate;
+            employee.EmploymentDate = request.EmploymentDate;
             employee.HomeAddress = request.Address;
             employee.Salary = request.Salary;
 
