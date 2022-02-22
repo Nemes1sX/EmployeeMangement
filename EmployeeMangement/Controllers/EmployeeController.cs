@@ -92,7 +92,7 @@ namespace EmployeeMangement.Controllers
         }
 
         [HttpGet]
-        [Route("role/{roleId}")]
+        [Route("role")]
         public async Task<ActionResult<CountRoleAvgSalaryDto>> GetAverageSalaryAndRole(int roleId)
         {
             try

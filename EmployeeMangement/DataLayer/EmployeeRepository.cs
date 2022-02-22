@@ -38,12 +38,9 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<EmployeeDto> GetEmployeeById(int id)
         {
-            var employee = await _db.Employees
-                            .Include(b => b.Boss).Include(r => r.Role)
-                            .SingleOrDefaultAsync(x => x.Id == id);
+            var employee = await _db.Employees.SingleAsync(x => x.Id == id);
 
             return _mapper.MapEmployee().Map<EmployeeDto>(employee);
-
         }
 
         public async Task<List<EmployeeDto>> GetEmployeesByBoss(int bossId)
@@ -67,9 +64,8 @@ namespace EmployeeMangement.DataLayer
             DateTime toDate;
             DateTime.TryParse(from, out fromDate);
             DateTime.TryParse(to, out toDate);
-            var employees = from p in _db.Employees
-                            select p;
-            
+        
+            var employees =  _db.Employees.AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -102,7 +98,7 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<CountRoleAvgSalaryDto> CountAndAverageSalaryByRole(int roleId)
         {
-            var role = _db.Roles.Find(roleId);
+            var role = await _db.Roles.FindAsync(roleId);
             if (role == null)
                 return null;
 
@@ -117,14 +113,8 @@ namespace EmployeeMangement.DataLayer
         public async Task<EmployeeDto> AddEmployee(EmployeeRequest request)
         {
             var employee = new Employee();
-            employee.BossId = request.BossId;
-            employee.RoleId = request.RoleId;
-            employee.LastName = request.LastName;
-            employee.FirstName = request.FirstName;
-            employee.BirthDate = request.BirthDate;
-            employee.EmploymentDate = request.EmploymentDate;
-            employee.HomeAddress = request.Address;
-            employee.Salary = request.Salary;
+ 
+            employee = SaveEmployee(employee, request);
 
             _db.Employees.Add(employee);
             await _db.SaveChangesAsync();
@@ -134,20 +124,14 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<EmployeeDto> UpdateEmployee(int id, EmployeeRequest request)
         {
-            var employee = _db.Employees.Find(id);
+            var employee = await _db.Employees.FindAsync(id);
             if (employee == null)
             {
                 return null;
             }
 
-            employee.BossId = request.BossId;
-            employee.RoleId = request.RoleId;
-            employee.LastName = request.LastName;
-            employee.FirstName = request.FirstName;
-            employee.BirthDate = request.BirthDate;
-            employee.EmploymentDate = request.EmploymentDate;
-            employee.HomeAddress = request.Address;
-            employee.Salary = request.Salary;
+   
+            employee = SaveEmployee(employee, request);
 
             await _db.SaveChangesAsync();
 
@@ -157,7 +141,7 @@ namespace EmployeeMangement.DataLayer
         public async Task<EmployeeDto> UpdateEmployeeSalary(int id, int salary)
         {
 
-            var employee = _db.Employees.Find(id);
+            var employee = await _db.Employees.FindAsync(id);
             if (employee == null)
             {
                 return null;
@@ -172,7 +156,7 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<int> DeleteEmployee(int id)
         {
-            var employee = _db.Employees.Find(id);
+            var employee = await _db.Employees.FindAsync(id);
             if (employee == null)
             {
                 return 0;
@@ -182,6 +166,20 @@ namespace EmployeeMangement.DataLayer
             await _db.SaveChangesAsync();
 
             return id;
+        }
+
+        private Employee SaveEmployee(Employee employee, EmployeeRequest request)
+        {
+            employee.BossId = request.BossId;
+            employee.RoleId = request.RoleId;
+            employee.LastName = request.LastName;
+            employee.FirstName = request.FirstName;
+            employee.BirthDate = request.BirthDate;
+            employee.EmploymentDate = request.EmploymentDate;
+            employee.HomeAddress = request.Address;
+            employee.Salary = request.Salary;
+
+            return employee;
         }
     }
 }
