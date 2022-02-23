@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using EmployeeMangement.Models;
 using EmployeeMangement.Models.Dtos;
+using EmployeeMangement.Models.Entities;
 
 namespace EmployeeMangement.Infrastructure
 {
@@ -21,6 +21,17 @@ namespace EmployeeMangement.Infrastructure
                      src => src.FirstName + "  " + src.LastName
                   ));
             });
+            var mapper = new Mapper(config);
+            return mapper;
+        }
+
+        public Mapper MapLocation()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Location, LocationDto>(); 
+            });
+
             var mapper = new Mapper(config);
             return mapper;
         }

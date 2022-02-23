@@ -1,14 +1,11 @@
 ﻿using EmployeeMangement.DataContext;
 using EmployeeMangement.Infrastructure;
-using EmployeeMangement.Models;
 using EmployeeMangement.Models.Dtos;
+using EmployeeMangement.Models.Entities;
 using EmployeeMangement.Models.FormRequest;
-using EmployeeMangement.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 

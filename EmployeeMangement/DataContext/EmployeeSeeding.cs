@@ -1,4 +1,4 @@
-﻿using EmployeeMangement.Models;
+﻿using EmployeeMangement.Models.Entities;
 using FizzWare.NBuilder;
 using Microsoft.EntityFrameworkCore;
 using System;

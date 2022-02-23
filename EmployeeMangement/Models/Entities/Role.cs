@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace EmployeeMangement.Models
+namespace EmployeeMangement.Models.Entities
 {
     public class Role
     {

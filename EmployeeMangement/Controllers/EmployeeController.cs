@@ -1,5 +1,5 @@
 ﻿using EmployeeMangement.DataLayer;
-using EmployeeMangement.Models;
+using EmployeeMangement.Models.Entities;
 using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
 using EmployeeMangement.Utilities;

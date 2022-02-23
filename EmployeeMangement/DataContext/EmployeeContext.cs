@@ -1,9 +1,5 @@
-﻿using Bogus;
-using EmployeeMangement.Models;
-using FizzWare.NBuilder;
+﻿using EmployeeMangement.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace EmployeeMangement.DataContext
 {
@@ -20,6 +16,7 @@ namespace EmployeeMangement.DataContext
             EmployeeSeeding.Seed(builder);
         }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Boss> Bosses { get; set; }
     }

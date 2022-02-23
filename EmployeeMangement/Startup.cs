@@ -45,6 +45,7 @@ namespace EmployeeMangement
         {
             services.AddControllers();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
             services.AddTransient<Mapping>();
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
