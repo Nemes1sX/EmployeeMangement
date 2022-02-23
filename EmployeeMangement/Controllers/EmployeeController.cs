@@ -17,198 +17,124 @@ namespace EmployeeMangement.Controllers
     {
 
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly LoggingException _loggingException;
 
         public EmployeeController(IEmployeeRepository employeeRepository, LoggingException loggingException)
         {
             _employeeRepository = employeeRepository;
-            _loggingException = loggingException;
         }
 
         [HttpGet]
         [Route("index")]
         public async Task<ActionResult<List<EmployeeDto>>> GetEmployees()
         {
-            try
-            {
-                var employees = await _employeeRepository.GetEmployees();
+            var employees = await _employeeRepository.GetEmployees();
 
-                if (employees.Count == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(employees);
-            }
-            catch (Exception ex)
+            if (employees.Count == 0)
             {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
+                return NotFound();
             }
+
+            return Ok(employees);
         }
 
         [HttpGet]
         [Route("show/{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
-            try
+            var employee = await _employeeRepository.GetEmployeeById(id);
+            if (employee == null)
             {
-                var employee = await _employeeRepository.GetEmployeeById(id);
-                if (employee == null)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(employee);
         }
 
         [HttpGet]
         [Route("boss")]
         public async Task<ActionResult<List<EmployeeDto>>> GetEmployeeByBoss(int bossId)
         {
-            try
-            {
-                var employees = await _employeeRepository.GetEmployeesByBoss(bossId);
+            var employees = await _employeeRepository.GetEmployeesByBoss(bossId);
 
-                if (employees == null || employees.Count == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(employees);
-            }
-            catch (Exception ex)
+            if (employees == null || employees.Count == 0)
             {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
+                return NotFound();
             }
 
+            return Ok(employees);
         }
 
         [HttpGet]
         [Route("role")]
         public async Task<ActionResult<CountRoleAvgSalaryDto>> GetAverageSalaryAndRole(int roleId)
         {
-            try
+            var result = await _employeeRepository.CountAndAverageSalaryByRole(roleId);
+            if (result == null)
             {
-                var result = await _employeeRepository.CountAndAverageSalaryByRole(roleId);
-                if (result == null)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("getbynameandbirth")]
         public async Task<ActionResult<List<EmployeeDto>>> GetByNameAndBirthDate(string name, string from, string to)
         {
-            try
-            {
-                var employees = await _employeeRepository.GetEmployeesByNameAndBirthDate(name, from, to);
+            var employees = await _employeeRepository.GetEmployeesByNameAndBirthDate(name, from, to);
 
-                if (employees.Count == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(employees);
-            }
-            catch (Exception ex)
+            if (employees.Count == 0)
             {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
+                return NotFound();
             }
+
+            return Ok(employees);
         }
 
         [HttpPost]
         [Route("add")]
         public async Task<ActionResult<EmployeeDto>> AddEmployee(EmployeeRequest request)
         {
-            try
-            {
-                var employee = await _employeeRepository.AddEmployee(request);
+            var employee = await _employeeRepository.AddEmployee(request);
 
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(employee);
+
         }
 
         [HttpPut]
         [Route("update")]
         public async Task<ActionResult<EmployeeDto>> UpdateEmployee(int id, EmployeeRequest request)
         {
-            try
-            {
-                var employee = await _employeeRepository.UpdateEmployee(id, request);
+            var employee = await _employeeRepository.UpdateEmployee(id, request);
 
-                if (employee == null)
-                    return NotFound();
+            if (employee == null)
+                return NotFound();
 
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(employee);
         }
 
         [HttpPatch]
         [Route("updatesalary")]
         public async Task<ActionResult<EmployeeDto>> UpdateEmployeeSalary(int id, int salary)
         {
-            try
-            {
-                var employee = await _employeeRepository.UpdateEmployeeSalary(id, salary);
 
-                if (employee == null)
-                    return NotFound();
+            var employee = await _employeeRepository.UpdateEmployeeSalary(id, salary);
 
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            if (employee == null)
+                return NotFound();
+
+            return Ok(employee);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public async Task<ActionResult<int>> DeleteEmployee(int id)
         {
-            try
-            {
+            var recordId = await _employeeRepository.DeleteEmployee(id);
+            if (recordId == 0)
+                return NotFound();
 
-                var recordId = await _employeeRepository.DeleteEmployee(id);
-                if (recordId == 0)
-                    return NotFound();
-
-                return Ok(id);
-            }
-            catch (Exception ex)
-            {
-                _loggingException.SaveLogFile(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(id);
         }
     }
 }

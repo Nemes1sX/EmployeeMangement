@@ -1,3 +1,7 @@
+#define InvalidModelStateResponseFactory
+//#define ExceptionFilter
+
+
 using EmployeeMangement.DataLayer;
 using EmployeeMangement.Utilities;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +21,14 @@ using System.Threading.Tasks;
 using EmployeeMangement.DataContext;
 using EmployeeMangement.Infrastructure;
 
+#if InvalidModelStateResponseFactory
+using System.Net.Mime;
+#endif
+
+#if ExceptionFilter
+using EmployeeMangement.Infrastructure.Filters;
+#endif
+
 namespace EmployeeMangement
 {
     public class Startup
@@ -34,11 +46,37 @@ namespace EmployeeMangement
             services.AddControllers();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<Mapping>();
-            services.AddTransient<LoggingException>();
             services.AddControllers().AddNewtonsoftJson(x =>
-                x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddDbContext<EmployeeContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("EmployeeDatabase")));
+
+
+            #if InvalidModelStateResponseFactory
+            // <snippet_DisableProblemDetailsInvalidModelStateResponseFactory>
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        var result = new BadRequestObjectResult(context.ModelState);
+
+                        // TODO: add `using System.Net.Mime;` to resolve MediaTypeNames
+                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+
+                        return result;
+                    };
+                });
+            // </snippet_DisableProblemDetailsInvalidModelStateResponseFactory>
+            #endif
+
+            #if ExceptionFilter
+            // <snippet_AddExceptionFilter>
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
+            // </snippet_AddExceptionFilter>
+            #endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +85,10 @@ namespace EmployeeMangement
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
