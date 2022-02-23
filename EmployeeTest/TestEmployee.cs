@@ -71,7 +71,7 @@ namespace EmployeeTest
                 FirstName = "Testas",
                 LastName = "Testenis",
                 Address = "Kretingos 14",
-                EmployentDate = DateTime.Now.AddYears(-5),
+                EmploymentDate = DateTime.Now.AddYears(-5),
                 BirthDate = DateTime.Now.AddYears(-25),
                 BossId = 1,
                 RoleId = 2,
@@ -84,7 +84,7 @@ namespace EmployeeTest
             Assert.Equal(data.Name, employeeeRequest.FirstName + " " + employeeeRequest.LastName);
             Assert.Equal(data.HomeAddress, employeeeRequest.Address);
             Assert.Equal(data.BirthDate, employeeeRequest.BirthDate);
-            Assert.Equal(data.EmploymentDate, employeeeRequest.EmployentDate);
+            Assert.Equal(data.EmploymentDate, employeeeRequest.EmploymentDate);
             Assert.Equal(data.Salary, employeeeRequest.Salary);            
         }
 
@@ -107,7 +107,7 @@ namespace EmployeeTest
                 FirstName = "Testas",
                 LastName = "Testenis",
                 Address = "Kretingos 15",
-                EmployentDate = DateTime.Now.AddYears(-5),
+                EmploymentDate = DateTime.Now.AddYears(-5),
                 BirthDate = DateTime.Now.AddYears(-25),
                 BossId = 1,
                 RoleId = 2,

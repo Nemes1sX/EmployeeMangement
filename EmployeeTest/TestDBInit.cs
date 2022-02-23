@@ -1,5 +1,5 @@
 ﻿using EmployeeMangement.DataContext;
-using EmployeeMangement.Models;
+using EmployeeMangement.Models.Entities;
 using FizzWare.NBuilder;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace EmployeeTest
                   .With(f => f.FirstName = Faker.Name.First())
                   .With(f => f.LastName = Faker.Name.Last())
             .Build();
- 
+
 
             context.Roles.AddRange(new Role { Id = 1, Name = "CEO" },
                new Role { Id = 2, Name = "Senior Specialist" },

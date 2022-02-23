@@ -15,6 +15,7 @@ namespace EmployeeMangement.DataContext
             base.OnModelCreating(builder);
             EmployeeSeeding.Seed(builder);
         }
+
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Role> Roles { get; set; }

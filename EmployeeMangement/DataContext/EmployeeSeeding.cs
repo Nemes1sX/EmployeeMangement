@@ -15,6 +15,14 @@ namespace EmployeeMangement.DataContext
                    .With(f => f.LastName = Faker.Name.Last())
                 .Build();
 
+            var locations = Builder<Location>.CreateListOfSize(20)
+                .All()
+                .With(f => f.Name = Faker.Lorem.GetFirstWord())
+                .With(f => f.Address = Faker.Address.StreetName() + ", " + Faker.Address.City() + ", " + Faker.Address.Country())
+                .With(f => f.MaxAllocation = Faker.RandomNumber.Next(5, 50))
+                .Build();
+
+            builder.Entity<Location>().HasData(locations);
 
             builder.Entity<Boss>().HasData(boss);
             builder.Entity<Role>()
