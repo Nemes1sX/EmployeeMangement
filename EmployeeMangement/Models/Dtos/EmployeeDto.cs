@@ -10,6 +10,7 @@ namespace EmployeeMangement.Models.Dtos
         public string Role { get; set; }
         public string HomeAddress { get; set; }
         public int Salary { get; set; }
+        public string Location { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime EmploymentDate { get; set; }
     }

@@ -27,6 +27,7 @@ namespace EmployeeMangement.DataLayer
             var employeesList = await _db.Employees
                  .Include(b => b.Boss)
                  .Include(r => r.Role)
+                 .Include(l => l.Location)
                  .ToListAsync();
 
 
@@ -35,7 +36,7 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<EmployeeDto> GetEmployeeById(int id)
         {
-            var employee = await _db.Employees.SingleAsync(x => x.Id == id);
+            var employee = await _db.Employees.Include(b => b.Boss).Include(r => r.Role).Include(l => l.Location).SingleAsync(x => x.Id == id);
 
             return _mapper.MapEmployee().Map<EmployeeDto>(employee);
         }
@@ -49,6 +50,7 @@ namespace EmployeeMangement.DataLayer
             var employees = await _db.Employees.Where(x => x.BossId == bossId)
                  .Include(x => x.Role)
                  .Include(b => b.Boss)
+                 .Include(l => l.Location)
                  .ToListAsync();
 
             return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
@@ -87,6 +89,7 @@ namespace EmployeeMangement.DataLayer
                 employees
                .Include(x => x.Boss)
                .Include(x => x.Role)
+               .Include(l => l.Location)
                .ToListAsync();
 
             return _mapper.MapEmployee().Map<List<EmployeeDto>>(employees);
@@ -169,6 +172,7 @@ namespace EmployeeMangement.DataLayer
         {
             employee.BossId = request.BossId;
             employee.RoleId = request.RoleId;
+            employee.LocationId = request.LocationId;
             employee.LastName = request.LastName;
             employee.FirstName = request.FirstName;
             employee.BirthDate = request.BirthDate;

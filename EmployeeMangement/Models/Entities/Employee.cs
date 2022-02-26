@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmployeeMangement.Models.FormRequest.CustomRules;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,9 +25,13 @@ namespace EmployeeMangement.Models.Entities
         public int? BossId { get; set; }
         [Required]
         public int RoleId { get; set; }
+        [Required, MaxLocationQuota()]
+        public int LocationId { get; set; }
         [ForeignKey("BossId")]
         public virtual Boss Boss { get; set; }
         [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
+        [ForeignKey("LocationId")]
+        public virtual Location Location { get; set; }
     }
 }

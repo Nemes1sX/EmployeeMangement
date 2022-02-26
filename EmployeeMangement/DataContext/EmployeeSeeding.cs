@@ -44,6 +44,7 @@ namespace EmployeeMangement.DataContext
                 .With(m => m.Salary = Faker.RandomNumber.Next(1000, 3000))
                 .With(m => m.HomeAddress = Faker.Address.StreetAddress())
                 .With(m => m.RoleId = Faker.RandomNumber.Next(1, 5))
+                .With(m => m.LocationId = Faker.RandomNumber.Next(1, 20))
                 .With(m => m.BirthDate = DateTime.Now.AddYears(-randomYears.Next(18, 70)))
                 .With(m => m.EmploymentDate = DateTime.Now.AddYears(-randomYears.Next(0, 22)))
                 .Build();

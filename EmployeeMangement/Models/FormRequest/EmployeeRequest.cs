@@ -1,4 +1,5 @@
-﻿using EmployeeMangement.Models.FormRequest.CustomRules;
+﻿using EmployeeMangement.DataContext;
+using EmployeeMangement.Models.FormRequest.CustomRules;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,5 +22,7 @@ namespace EmployeeMangement.Models.FormRequest
         public int? BossId { get; set; }
         [Required, BossCeo]
         public int RoleId { get; set; }
+        [Required, MaxLocationQuota]
+        public int LocationId { get; set; }
     }
 }

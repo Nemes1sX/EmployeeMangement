@@ -5,6 +5,7 @@ using EmployeeMangement.Models.Entities;
 using EmployeeMangement.Models.FormRequest;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmployeeMangement.DataLayer
@@ -28,7 +29,7 @@ namespace EmployeeMangement.DataLayer
             _db.Locations.Add(location);
             await _db.SaveChangesAsync();
 
-            return _mapper.MapLocation().Map<LocationDto>(location);
+            return _mapper.MapLocation(location);
         }
 
         public async Task<int> DeleteLocation(int id)
@@ -46,9 +47,10 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<List<LocationDto>> GetLocations()
         {
-            var locations = await _db.Locations.ToListAsync();
+            var locations = await _db.Locations.Include(x => x.Employees)
+                .ToListAsync();
 
-            return _mapper.MapLocation().Map<List<LocationDto>>(locations);
+            return _mapper.MapLocations(locations);
         }
 
         public async Task<LocationDto> ShowLocation(int id)
@@ -58,7 +60,7 @@ namespace EmployeeMangement.DataLayer
             if (location == null)
                 return null;
        
-            return _mapper.MapLocation().Map<LocationDto>(location);
+            return _mapper.MapLocation(location);
         }
 
         public async Task<LocationDto> UpdateLocation(int id, LocationRequest request)
@@ -71,7 +73,7 @@ namespace EmployeeMangement.DataLayer
             location = SaveLocation(location, request);
             await _db.SaveChangesAsync();
 
-            return _mapper.MapLocation().Map<LocationDto>(location);
+            return _mapper.MapLocation(location);
         }
 
         private Location SaveLocation(Location location, LocationRequest request)

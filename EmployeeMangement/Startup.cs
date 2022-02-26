@@ -49,7 +49,7 @@ namespace EmployeeMangement
             services.AddTransient<Mapping>();
             services.AddControllers().AddNewtonsoftJson(x =>
                 x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            services.AddDbContext<EmployeeContext>(options =>
+            services.AddDbContextPool<EmployeeContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("EmployeeDatabase")));
 
 

@@ -18,7 +18,7 @@ namespace EmployeeMangement.Controllers
 
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, LoggingException loggingException)
+        public EmployeeController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }

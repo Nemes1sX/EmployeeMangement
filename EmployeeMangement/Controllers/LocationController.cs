@@ -1,8 +1,10 @@
-﻿using EmployeeMangement.DataLayer;
+﻿using EmployeeMangement.DataContext;
+using EmployeeMangement.DataLayer;
 using EmployeeMangement.Models.Dtos;
 using EmployeeMangement.Models.FormRequest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +16,12 @@ namespace EmployeeMangement.Controllers
     public class LocationController : ControllerBase
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly EmployeeContext _db;
 
-        public LocationController(ILocationRepository locationRepository)
+        public LocationController(ILocationRepository locationRepository, EmployeeContext db)
         {
             _locationRepository = locationRepository;
+            _db = db;
         }
 
         [HttpGet]
@@ -57,9 +61,9 @@ namespace EmployeeMangement.Controllers
         [Route("update")]
         public async Task<ActionResult<LocationDto>> UpdateLocation(int id, LocationRequest request)
         {
-           var location = await _locationRepository.UpdateLocation(id, request);
+            var location = await _locationRepository.UpdateLocation(id, request);
 
-            if (location == null) 
+            if (location == null)
                 return NotFound();
 
             return location;
@@ -75,6 +79,15 @@ namespace EmployeeMangement.Controllers
                 return NotFound();
 
             return id;
+        }
+
+        [HttpGet]
+        [Route("id")]
+        public async Task<List<int>> GetId()
+        {
+            var idList = await _db.Locations.Select(x => x.Id).ToListAsync();
+
+            return idList;
         }
 
     }
