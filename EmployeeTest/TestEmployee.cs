@@ -19,37 +19,27 @@ namespace EmployeeTest
     [TestCaseOrderer("EmployeeTest.Orderers.PriorityOrder", "EmployeeTest")]
     public class TestEmployee
     {
-        private Mapping mapper;
         private EmployeeRepository repo;
         public static DbContextOptions<EmployeeContext> dbContextOptions { get; }
         public static IConfiguration Configuration { get; }
 
-        //public static string connectionString = Configuration["ConnectionStrings:TestEmployeeDatabase"];
-
-        //public static string connectionString = "Server=DESKTOP-7VL5B8Q;Database=EmployerTest;User ID=sa;PWD=qwaeis12;Trusted_Connection=False; MultipleActiveResultSets=true;Integrated Security=SSPI";
-        public static string connectionString = "Server=(localdb)\\v15.0;Database=TestEmployent;Trusted_Connection=True;";
-
-
         static TestEmployee()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             dbContextOptions = new DbContextOptionsBuilder<EmployeeContext>()
-           .UseSqlServer(connectionString)
-           .Options;
-            /*dbContextOptions = new DbContextOptionsBuilder<EmployeeContext>()
-            .UseSqlite(connection)
-            .Options;*/
+                .UseInMemoryDatabase(databaseName: "TestDb")
+                .Options;
+
         }
 
         public TestEmployee()
         {
             var context = new EmployeeContext(dbContextOptions);
+            var mapper = new Mapping();
+
             TestDBInit db = new TestDBInit();
             db.Seed(context);
-
             repo = new EmployeeRepository(context, mapper);
+         
         }
 
         [Fact, TestPriority(1)]

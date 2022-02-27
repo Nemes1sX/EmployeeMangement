@@ -25,7 +25,7 @@ namespace EmployeeMangement.Models.Entities
         public int? BossId { get; set; }
         [Required]
         public int RoleId { get; set; }
-        [Required, MaxLocationQuota()]
+        [Required]
         public int LocationId { get; set; }
         [ForeignKey("BossId")]
         public virtual Boss Boss { get; set; }

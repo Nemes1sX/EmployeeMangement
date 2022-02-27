@@ -15,6 +15,7 @@ namespace EmployeeMangement.Models.Entities
         [Required]
         public string Address { get; set; }
         [Required]
+        [Column("MaxAllocation")]
         public int MaxAllocation { get; set; }
         public virtual List<Employee> Employees { get; set; }
     }

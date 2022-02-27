@@ -7,6 +7,9 @@ namespace EmployeeMangement.Models.FormRequest
 {
     public class EmployeeRequest
     {
+
+        private readonly EmployeeContext _db;
+
         [Required, MinLength(4), MaxLength(50)]
         public string FirstName { get; set; }
         [Required, MinLength(4), MaxLength(50), FirstLastName]
@@ -22,7 +25,8 @@ namespace EmployeeMangement.Models.FormRequest
         public int? BossId { get; set; }
         [Required, BossCeo]
         public int RoleId { get; set; }
-        [Required, MaxLocationQuota]
+        [Required]
         public int LocationId { get; set; }
+
     }
 }
