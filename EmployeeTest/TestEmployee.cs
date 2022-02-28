@@ -12,7 +12,8 @@ using System.Configuration;
 using Xunit;
 using Microsoft.Data.Sqlite;
 using EmployeeTest.Attributes;
-
+using EmployeeMangement.Models.Entities;
+using FizzWare.NBuilder;
 
 namespace EmployeeTest
 {
@@ -38,8 +39,9 @@ namespace EmployeeTest
 
             TestDBInit db = new TestDBInit();
             db.Seed(context);
+
+            context.SaveChanges();
             repo = new EmployeeRepository(context, mapper);
-         
         }
 
         [Fact, TestPriority(1)]
@@ -67,7 +69,7 @@ namespace EmployeeTest
                 RoleId = 2,
                 Salary = 1500,
             };
-            
+
             var data = await repo.AddEmployee(employeeeRequest);
 
             Assert.IsType<EmployeeDto>(data);
@@ -75,7 +77,7 @@ namespace EmployeeTest
             Assert.Equal(data.HomeAddress, employeeeRequest.Address);
             Assert.Equal(data.BirthDate, employeeeRequest.BirthDate);
             Assert.Equal(data.EmploymentDate, employeeeRequest.EmploymentDate);
-            Assert.Equal(data.Salary, employeeeRequest.Salary);            
+            Assert.Equal(data.Salary, employeeeRequest.Salary);
         }
 
         [Fact, TestPriority(3)]

@@ -47,10 +47,16 @@ namespace EmployeeMangement.DataLayer
 
         public async Task<List<LocationDto>> GetLocations()
         {
+            var locationsDto = new List<LocationDto>();
             var locations = await _db.Locations.Include(x => x.Employees)
                 .ToListAsync();
+            foreach (var location in locations)
+            {
+                var locationDto = _mapper.MapLocation(location);
+                locationsDto.Add(locationDto);
+            }
 
-            return _mapper.MapLocations(locations);
+            return locationsDto;
         }
 
         public async Task<LocationDto> ShowLocation(int id)
