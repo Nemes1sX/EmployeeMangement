@@ -19,7 +19,7 @@ namespace EmployeeMangement.Infrastructure
                     src => src.Role.Name
                  ))
                  .ForMember(dest => dest.Name, act => act.MapFrom(
-                     src => src.FirstName + "  " + src.LastName
+                     src => src.FirstName + " " + src.LastName
                   ))
                  .ForMember(dest => dest.Location, act => act.MapFrom(
                      src => src.Location.Name + " " + src.Location.Address
@@ -41,7 +41,7 @@ namespace EmployeeMangement.Infrastructure
             {
                 var employeeDto = new LocationEmployeeDto();
                 employeeDto.Id = employee.Id;
-                employeeDto.Name = employee.FirstName + "  " + employee.LastName;
+                employeeDto.Name = employee.FirstName + " " + employee.LastName;
                 locationDto.Employees.Add(employeeDto);
             }
             return locationDto;

@@ -45,16 +45,6 @@ namespace EmployeeTest
         }
 
         [Fact, TestPriority(1)]
-        public async void Task_GetEmployees()
-        {
-
-            var data = await repo.GetEmployees();
-
-            Assert.IsType<List<EmployeeDto>>(data);
-            Assert.Equal(100, data.Count);
-        }
-
-        [Fact, TestPriority(2)]
         public async void Task_CreateEmployee()
         {
 
@@ -80,10 +70,20 @@ namespace EmployeeTest
             Assert.Equal(data.Salary, employeeeRequest.Salary);
         }
 
+        [Fact, TestPriority(2)]
+        public async void Task_GetEmployees()
+        {
+
+            var data = await repo.GetEmployees();
+
+            Assert.IsType<List<EmployeeDto>>(data);
+            Assert.Single(data);
+        }
+
         [Fact, TestPriority(3)]
         public async void Task_GetEmployeeById()
         {
-            var employeeId = 101;
+            var employeeId = 1;
 
             var data = await repo.GetEmployeeById(employeeId);
 
@@ -106,7 +106,7 @@ namespace EmployeeTest
                 Salary = 1500,
             };
 
-            var employeeId = 101;
+            var employeeId = 1;
 
             var data = await repo.UpdateEmployee(employeeId, employeeeRequest);
 
@@ -118,7 +118,7 @@ namespace EmployeeTest
         [Fact, TestPriority(5)]
         public async void Task_DeleteEmployee()
         {
-            var employeeId = 101;
+            var employeeId = 1;
 
             await repo.DeleteEmployee(employeeId);
             var data = await repo.GetEmployeeById(employeeId);
