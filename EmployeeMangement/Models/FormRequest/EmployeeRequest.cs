@@ -25,8 +25,8 @@ namespace EmployeeMangement.Models.FormRequest
         public int? BossId { get; set; }
         [Required, BossCeo]
         public int RoleId { get; set; }
-        [Required]
+        [Required, MaxLocationQuota]
         public int LocationId { get; set; }
-
+         
     }
 }
