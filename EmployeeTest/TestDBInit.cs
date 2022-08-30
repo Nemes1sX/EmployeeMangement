@@ -1,21 +1,25 @@
 ﻿using EmployeeMangement.DataContext;
 using EmployeeMangement.Models.Entities;
 using FizzWare.NBuilder;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EmployeeTest
 {
     public class TestDBInit
     {
+       private DbContextOptions<EmployeeContext> dbContextOptions = new DbContextOptionsBuilder<EmployeeContext>()
+      .UseInMemoryDatabase(databaseName: "TestDb")
+      .Options;
+
         public TestDBInit()
         {
 
         }
 
-        public void Seed(EmployeeContext context)
+        public void Seed()
         {
+            using var context = new EmployeeContext(dbContextOptions);
             context.Database.EnsureCreated();
             context.Database.EnsureDeleted();
 
